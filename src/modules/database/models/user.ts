@@ -3,6 +3,7 @@ import { Model } from 'objection';
 
 import { enRoles, IUser } from '../interfaces/user';
 import { Device } from './device';
+import { Order } from './order';
 
 export class User extends Model implements IUser {
   @ApiProperty({ type: 'integer' })
@@ -23,6 +24,8 @@ export class User extends Model implements IUser {
 
   @ApiProperty({ nullable: true })
   public devices?: Device[];
+  @ApiProperty({ nullable: true })
+  public orders?: Order[];
 
   @ApiProperty({ type: 'string' })
   public get fullName(): string {
@@ -41,6 +44,14 @@ export class User extends Model implements IUser {
         join: {
           from: 'User.id',
           to: 'Device.userId'
+        }
+      },
+      orders: {
+        relation: Model.HasManyRelation,
+        modelClass: Order,
+        join: {
+          from: 'User.id',
+          to: 'Order.userId'
         }
       }
     };
